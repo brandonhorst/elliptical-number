@@ -1,0 +1,8 @@
+{
+	"lang": ["en"],
+	"root": {
+		"type": "value",
+		"compute": "integer",
+		"id": "@value"
+	}
+}

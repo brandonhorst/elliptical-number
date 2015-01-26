@@ -1,6 +1,6 @@
 {
   "name": "lacona-phrase-number",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Enable Lacona to parse numbers, including integers, floats, ane more",
   "main": "lib/number.js",
   "scripts": {

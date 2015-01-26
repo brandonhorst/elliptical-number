@@ -4,7 +4,14 @@
   "description": "Enable Lacona to parse numbers, including integers, floats, ane more",
   "main": "lib/number.js",
   "scripts": {
-    "test": "mocha test"
+    "lint": "npm run lint:lib && npm run lint:test",
+    "lint:lib": "jshint --config node_modules/lacona-util-jshint/lib.json lib",
+    "lint:test": "jshint --config node_modules/lacona-util-jshint/test.json test",
+    "test": "mocha test",
+    "validate": "npm run lint && npm test",
+    "cover": "istanbul cover _mocha test -- -R dot && istanbul report text",
+    "coveralls": "istanbul cover _mocha test --report lcovonly -- -R dot && cat coverage/lcov.info | coveralls && rimraf ./coverage",
+    "prepublish": "npm run validate"
   },
   "repository": {
     "type": "git",
@@ -23,15 +30,19 @@
   },
   "homepage": "https://github.com/brandonhorst/lacona-phrase-number",
   "devDependencies": {
-    "async": "^0.9.0",
-    "chai": "^1.9.1",
-    "lacona": "^0.3.0",
-    "mocha": "^1.20.1",
-    "moment": "^2.7.0",
-    "sinon": "^1.10.2",
-    "sinon-chai": "^2.5.0"
+    "array-stream": "^0.1.1",
+    "chai": "^1.10.0",
+    "coveralls": "^2.11.2",
+    "event-stream": "^3.2.1",
+    "istanbul": "^0.3.5",
+    "jshint": "^2.6.0",
+    "lacona-util-fulltext": "^0.2.0",
+    "lacona-util-jshint": "^0.2.0",
+    "mocha": "^2.1.0",
+    "stream-array": "^1.0.1"
   },
   "dependencies": {
-    "lacona-util": "0.0.0"
+    "lacona": "^0.16.0",
+    "lacona-phrase-freetext": "^0.5.2"
   }
 }

@@ -1,11 +1,15 @@
 /** @jsx createElement */
 /* eslint-env mocha */
 
+import _ from 'lodash'
 import {createElement, Phrase} from 'lacona-phrase'
 import {DigitString} from '..'
 import {expect} from 'chai'
-import fulltext from 'lacona-util-fulltext'
 import {Parser} from 'lacona'
+
+function text(input) {
+  return _.map(input.words, 'text').join('')
+}
 
 describe('DigitString', () => {
   let parser, data
@@ -19,7 +23,7 @@ describe('DigitString', () => {
 
     data = parser.parseArray('123')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('123')
+    expect(text(data[0])).to.equal('123')
     expect(data[0].result).to.equal('123')
 
     data = parser.parseArray('123f')
@@ -31,12 +35,12 @@ describe('DigitString', () => {
 
     data = parser.parseArray('7')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('7')
+    expect(text(data[0])).to.equal('7')
     expect(data[0].result).to.equal('7')
 
     data = parser.parseArray('5')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('5')
+    expect(text(data[0])).to.equal('5')
     expect(data[0].result).to.equal('5')
 
     data = parser.parseArray('3')
@@ -48,12 +52,12 @@ describe('DigitString', () => {
 
     data = parser.parseArray('3')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('3')
+    expect(text(data[0])).to.equal('3')
     expect(data[0].result).to.equal('3')
 
     data = parser.parseArray('5')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('5')
+    expect(text(data[0])).to.equal('5')
     expect(data[0].result).to.equal('5')
 
     data = parser.parseArray('7')
@@ -68,17 +72,17 @@ describe('DigitString', () => {
 
     data = parser.parseArray('3')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('3')
+    expect(text(data[0])).to.equal('3')
     expect(data[0].result).to.equal('3')
 
     data = parser.parseArray('4')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('4')
+    expect(text(data[0])).to.equal('4')
     expect(data[0].result).to.equal('4')
 
     data = parser.parseArray('5')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('5')
+    expect(text(data[0])).to.equal('5')
     expect(data[0].result).to.equal('5')
 
     data = parser.parseArray('6')
@@ -90,12 +94,12 @@ describe('DigitString', () => {
 
     data = parser.parseArray('04')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('04')
+    expect(text(data[0])).to.equal('04')
     expect(data[0].result).to.equal('04')
 
     data = parser.parseArray('403')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('403')
+    expect(text(data[0])).to.equal('403')
     expect(data[0].result).to.equal('403')
 
     data = parser.parseArray('3')
@@ -107,12 +111,12 @@ describe('DigitString', () => {
 
     data = parser.parseArray('02')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('02')
+    expect(text(data[0])).to.equal('02')
     expect(data[0].result).to.equal('02')
 
     data = parser.parseArray('403')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('403')
+    expect(text(data[0])).to.equal('403')
     expect(data[0].result).to.equal('403')
 
     data = parser.parseArray('4032')
@@ -127,17 +131,17 @@ describe('DigitString', () => {
 
     data = parser.parseArray('03')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('03')
+    expect(text(data[0])).to.equal('03')
     expect(data[0].result).to.equal('03')
 
     data = parser.parseArray('440')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('440')
+    expect(text(data[0])).to.equal('440')
     expect(data[0].result).to.equal('440')
 
     data = parser.parseArray('4242')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('4242')
+    expect(text(data[0])).to.equal('4242')
     expect(data[0].result).to.equal('4242')
 
     data = parser.parseArray('123456')
@@ -155,17 +159,17 @@ describe('DigitString', () => {
 
     data = parser.parseArray('100')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('100')
+    expect(text(data[0])).to.equal('100')
     expect(data[0].result).to.equal('100')
 
     data = parser.parseArray('0777')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('0777')
+    expect(text(data[0])).to.equal('0777')
     expect(data[0].result).to.equal('0777')
 
     data = parser.parseArray('7000')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('7000')
+    expect(text(data[0])).to.equal('7000')
     expect(data[0].result).to.equal('7000')
 
     data = parser.parseArray('8500')
@@ -183,12 +187,12 @@ describe('DigitString', () => {
 
     data = parser.parseArray('20')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('20')
+    expect(text(data[0])).to.equal('20')
     expect(data[0].result).to.equal('20')
 
     data = parser.parseArray('0')
     expect(data).to.have.length(1)
-    expect(fulltext.all(data[0])).to.equal('0')
+    expect(text(data[0])).to.equal('0')
     expect(data[0].result).to.equal('0')
   })
 })

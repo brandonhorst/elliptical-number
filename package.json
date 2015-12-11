@@ -7,16 +7,16 @@
   },
   "dependencies": {
     "lacona-phrase": "^0.7.0",
-    "lodash": "^3.7.0"
+    "lodash": "^3.10.1"
   },
   "description": "Enable Lacona to parse numbers, including integers, floats, ane more",
   "devDependencies": {
     "babel": "^5.1.11",
-    "chai": "^2.2.0",
-    "lacona": "^0.26.0",
+    "chai": "^3.4.1",
+    "lacona": "^0.32.0",
     "lacona-util-fulltext": "^0.2.0",
-    "mocha": "^2.2.4",
-    "rimraf": "^2.3.2"
+    "mocha": "^2.3.4",
+    "rimraf": "^2.4.4"
   },
   "gitHead": "8726f9155ce6b2586c30c865db73bf217d83f26c",
   "homepage": "https://github.com/brandonhorst/lacona-phrase-number",

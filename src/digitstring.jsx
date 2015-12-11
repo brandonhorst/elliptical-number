@@ -3,7 +3,7 @@ import {createElement, Phrase} from 'lacona-phrase'
 import _ from 'lodash'
 
 export default class DigitString {
-  validate (input) {
+  filter (input) {
     if (!/^[0-9]+$/.test(input)) return false
 
     if (input.length > this.props.maxLength) return false
@@ -37,11 +37,11 @@ export default class DigitString {
     if (this.props.descriptor) {
       return (
         <placeholder text={this.props.descriptor} displayWhen={this.displayWhen.bind(this)}>
-          <freetext validate={this.validate.bind(this)} splitOn={/\D/} score={1} />
+          <freetext validate={this.filter.bind(this)} splitOn={/\D/} score={1} />
         </placeholder>
       )
     } else {
-      return <freetext validate={this.validate.bind(this)} splitOn={/\D/} score={1} />
+      return <freetext validate={this.filter.bind(this)} splitOn={/\D/} score={1} />
     }
   }
 }

@@ -10,7 +10,7 @@ export default class Ordinal extends Phrase {
     return parseInt(result, 10)
   }
 
-  validate (input) {
+  filter (input) {
     if (!/^(?:\d+th|\d*1st|\d*2nd|\d*3rd)$/.test(input)) return false
 
     const number = parseInt(input, 10)
@@ -27,7 +27,7 @@ export default class Ordinal extends Phrase {
   describe () {
     return (
       <placeholder text={this.props.descriptor} displayWhen={this.displayWhen.bind(this)}>
-        <freetext validate={this.validate.bind(this)} limit={this.props.limit} splitOn={/[ ,]/} score={1} />
+        <freetext validate={this.filter.bind(this)} limit={this.props.limit} splitOn={/[ ,]/} score={1} />
       </placeholder>
     )
   }

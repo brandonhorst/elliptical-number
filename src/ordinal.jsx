@@ -26,9 +26,11 @@ export default class Ordinal extends Phrase {
 
   describe () {
     return (
-      <label text={this.props.argument} suppressWhen={this.suppressWhen.bind(this)}>
-        <freetext validate={this.filter.bind(this)} limit={this.props.limit} splitOn={/[ ,]/} score={1} />
-      </label>
+      <map function={this.getValue.bind(this)}>
+        <label text={this.props.argument} suppressWhen={this.suppressWhen.bind(this)}>
+          <freetext filter={this.filter.bind(this)} limit={this.props.limit} splitOn={/[ ,-]/} score={1} />
+        </label>
+      </map>
     )
   }
 }

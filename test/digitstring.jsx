@@ -130,7 +130,7 @@ describe('DigitString', () => {
   it('handles a digit string with a minLength and a maxLength', () => {
     parser.grammar = <DigitString minLength={2} maxLength={4} />
 
-    let data = parser.parseArray('2')
+    data = parser.parseArray('2')
     expect(data).to.have.length(1)
     expect(text(data[0])).to.equal('number')
     expect(data[0].words[0].placeholder).to.be.true

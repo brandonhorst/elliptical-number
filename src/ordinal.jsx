@@ -17,7 +17,7 @@ export default class Ordinal extends Phrase {
     return number <= this.props.max && number >= this.props.min
   }
 
-  displayWhen (input) {
+  suppressWhen (input) {
     if (!/^(?:\d*|\d*t|\d*1s|\d*2n|\d*3r)$/.test(input)) return false
 
     const number = parseInt(input, 10) || 1
@@ -26,9 +26,9 @@ export default class Ordinal extends Phrase {
 
   describe () {
     return (
-      <placeholder text={this.props.descriptor} displayWhen={this.displayWhen.bind(this)}>
+      <label text={this.props.argument} suppressWhen={this.suppressWhen.bind(this)}>
         <freetext validate={this.filter.bind(this)} limit={this.props.limit} splitOn={/[ ,]/} score={1} />
-      </placeholder>
+      </label>
     )
   }
 }
@@ -36,5 +36,5 @@ export default class Ordinal extends Phrase {
 Ordinal.defaultProps = {
   max: MAX_SAFE_INTEGER,
   min: 1,
-  descriptor: 'nth'
+  argument: 'nth'
 }

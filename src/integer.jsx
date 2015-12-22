@@ -17,7 +17,7 @@ export default class Integer extends Phrase {
     return number <= this.props.max && number >= this.props.min
   }
 
-  displayWhen (input) {
+  suppressWhen (input) {
     if (!/^[\-\+]?\d*$/.test(input)) return false
 
     const number = parseInt(input, 10) || 0
@@ -34,9 +34,9 @@ export default class Integer extends Phrase {
 
   describe () {
     return (
-      <placeholder text={this.props.descriptor} displayWhen={this.displayWhen.bind(this)}>
-        <freetext validate={this.filter.bind(this)} limit={this.props.limit} splitOn={/\D/} score={1} />
-      </placeholder>
+      <label text={this.props.argument} suppressWhen={this.suppressWhen.bind(this)}>
+        <freetext filter={this.filter.bind(this)} limit={this.props.limit} splitOn={/\D/} score={1} />
+      </label>
     )
   }
 }
@@ -44,5 +44,5 @@ export default class Integer extends Phrase {
 Integer.defaultProps = {
   max: MAX_SAFE_INTEGER,
   min: -MAX_SAFE_INTEGER,
-  descriptor: 'number'
+  argument: 'number'
 }

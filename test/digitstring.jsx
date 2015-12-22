@@ -44,7 +44,9 @@ describe('DigitString', () => {
     expect(data[0].result).to.equal('5')
 
     data = parser.parseArray('3')
-    expect(data).to.have.length(0)
+    expect(data).to.have.length(1)
+    expect(text(data[0])).to.equal('number')
+    expect(data[0].words[0].placeholder).to.be.true
   })
 
   it('handles a digit string with a max', () => {
@@ -103,7 +105,9 @@ describe('DigitString', () => {
     expect(data[0].result).to.equal('403')
 
     data = parser.parseArray('3')
-    expect(data).to.have.length(0)
+    expect(data).to.have.length(1)
+    expect(text(data[0])).to.equal('number')
+    expect(data[0].words[0].placeholder).to.be.true
   })
 
   it('handles a digit string with a maxLength', () => {
@@ -126,8 +130,10 @@ describe('DigitString', () => {
   it('handles a digit string with a minLength and a maxLength', () => {
     parser.grammar = <DigitString minLength={2} maxLength={4} />
 
-    data = parser.parseArray('2')
-    expect(data).to.have.length(0)
+    let data = parser.parseArray('2')
+    expect(data).to.have.length(1)
+    expect(text(data[0])).to.equal('number')
+    expect(data[0].words[0].placeholder).to.be.true
 
     data = parser.parseArray('03')
     expect(data).to.have.length(1)
@@ -151,11 +157,18 @@ describe('DigitString', () => {
   it('handles a digit string with a all validators', () => {
     parser.grammar = <DigitString minLength={3} maxLength={4} min={10} max={8000} />
 
-    data = parser.parseArray('002')
+    data = parser.parseArray('0002')
     expect(data).to.have.length(0)
 
-    data = parser.parseArray('20')
-    expect(data).to.have.length(0)
+    data = parser.parseArray('002')
+    expect(data).to.have.length(1)
+    expect(text(data[0])).to.equal('number')
+    expect(data[0].words[0].placeholder).to.be.true
+
+    let data = parser.parseArray('20')
+    expect(data).to.have.length(1)
+    expect(text(data[0])).to.equal('number')
+    expect(data[0].words[0].placeholder).to.be.true
 
     data = parser.parseArray('100')
     expect(data).to.have.length(1)

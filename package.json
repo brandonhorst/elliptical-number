@@ -6,7 +6,7 @@
     "url": "https://github.com/brandonhorst/lacona-phrase-number/issues"
   },
   "dependencies": {
-    "lacona-phrase": "^0.7.0",
+    "lacona-phrase": "^0.9.1",
     "lodash": "^3.10.1"
   },
   "description": "Enable Lacona to parse numbers, including integers, floats, ane more",

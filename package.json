@@ -18,7 +18,6 @@
     "mocha": "^2.3.4",
     "rimraf": "^2.4.4"
   },
-  "gitHead": "8726f9155ce6b2586c30c865db73bf217d83f26c",
   "homepage": "https://github.com/brandonhorst/lacona-phrase-number",
   "keywords": [
     "float",

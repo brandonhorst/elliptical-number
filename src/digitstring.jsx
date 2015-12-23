@@ -30,7 +30,7 @@ export default class DigitString extends Phrase {
 
     const lowestOneMoreDigit = `${input}0`
     if (lowestOneMoreDigit.length > this.props.maxLength) return false
-    
+
     const lowestOneMoreDigitIntValue = parseInt(lowestOneMoreDigit, 10)
     if (lowestOneMoreDigitIntValue > this.props.max) return false
 
@@ -46,7 +46,7 @@ export default class DigitString extends Phrase {
   }
 }
 DigitString.defaultProps = {
-  minLength: 0,
+  minLength: 1,
   maxLength: 9007199254740991,
   min: 0,
   max: 9007199254740991,

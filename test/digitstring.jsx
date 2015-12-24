@@ -2,210 +2,212 @@
 /* eslint-env mocha */
 
 import _ from 'lodash'
-import {createElement, Phrase} from 'lacona-phrase'
-import {DigitString} from '..'
-import {expect} from 'chai'
-import {Parser} from 'lacona'
+import { createElement, Phrase } from 'lacona-phrase'
+import { DigitString } from '..'
+import { expect } from 'chai'
+import { Parser } from 'lacona'
 
 function text(input) {
   return _.map(input.words, 'text').join('')
 }
 
 describe('DigitString', () => {
-  let parser, data
+  let parser
 
-  beforeEach(() => {
+  before(() => {
     parser = new Parser()
   })
 
-  it('handles a digit string with no min/max', () => {
-    parser.grammar = <DigitString />
+  function test({input, text, placeholder, result, length = 1}) {
+    if (text == null)  {
+      text = placeholder ? 'number' : input
+    }
+    if (result == null) {
+      result = placeholder ? undefined : text
+    }
 
-    data = parser.parseArray('123')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('123')
-    expect(data[0].result).to.equal('123')
+    it(input, () => {
+      const data = parser.parseArray(input)
+      expect(data, input).to.have.length(length)
+      if (length >= 1) {
+        expect(data[0].words[0].text, input).to.equal(text)
+        expect(data[0].words[0].placeholder, input).to.equal(placeholder)
+        expect(data[0].result, input).to.equal(result)
+      }
+    })
+  }
 
-    data = parser.parseArray('123f')
-    expect(data).to.have.length(0)
+  describe('default', () => {
+    before(() => {
+      parser.grammar = <DigitString />
+    })
+
+    const testCases = [
+      {input: '', placeholder: true},
+      {input: '0'},
+      {input: '1'},
+      {input: '01'},
+      {input: '123'},
+      {input: '-123', length: 0},
+      {input: '+123', length: 0}
+    ]
+
+    _.forEach(testCases, test)
   })
 
-  it('handles a digit string with a min', () => {
-    parser.grammar = <DigitString min={5} />
+  describe('min', () => {
+    before(() => {
+      parser.grammar = <DigitString min={50} />
+    })
 
-    data = parser.parseArray('7')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('7')
-    expect(data[0].result).to.equal('7')
+    const testCases = [
+      {input: '0', placeholder: true},
+      {input: '1', placeholder: true},
+      {input: '01', placeholder: true},
+      {input: '049', placeholder: true},
+      {input: '49', placeholder: true},
+      {input: '50'},
+      {input: '51'},
+      {input: '490'},
+      {input: '0051'}
+    ]
 
-    data = parser.parseArray('5')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('5')
-    expect(data[0].result).to.equal('5')
-
-    data = parser.parseArray('3')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('number')
-    expect(data[0].words[0].placeholder).to.be.true
+    _.forEach(testCases, test)
   })
 
-  it('handles a digit string with a max', () => {
-    parser.grammar = <DigitString max={5} />
+  describe('max', () => {
+    before(() => {
+      parser.grammar = <DigitString max={50} />
+    })
 
-    data = parser.parseArray('3')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('3')
-    expect(data[0].result).to.equal('3')
+    const testCases = [
+      {input: '0'},
+      {input: '1'},
+      {input: '01'},
+      {input: '049'},
+      {input: '50'},
+      {input: '51', length: 0},
+      {input: '490', length: 0},
+      {input: '0051', length: 0}
+    ]
 
-    data = parser.parseArray('5')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('5')
-    expect(data[0].result).to.equal('5')
-
-    data = parser.parseArray('7')
-    expect(data).to.have.length(0)
+    _.forEach(testCases, test)
   })
 
-  it('handles a digit string with a min and a max', () => {
-    parser.grammar = <DigitString min={3} max={5} />
+  describe('min/max', () => {
+    before(() => {
+      parser.grammar = <DigitString min={30} max={70} />
+    })
 
-    data = parser.parseArray('2')
-    expect(data).to.have.length(0)
+    const testCases = [
+      {input: '0', placeholder: true},
+      {input: '1', placeholder: true},
+      {input: '8', placeholder: true}, // TODO
+      {input: '01', placeholder: true},
+      {input: '029', placeholder: true},
+      {input: '30'},
+      {input: '50'},
+      {input: '70'},
+      {input: '71', length: 0},
+      {input: '0090', length: 0}
+    ]
 
-    data = parser.parseArray('3')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('3')
-    expect(data[0].result).to.equal('3')
-
-    data = parser.parseArray('4')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('4')
-    expect(data[0].result).to.equal('4')
-
-    data = parser.parseArray('5')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('5')
-    expect(data[0].result).to.equal('5')
-
-    data = parser.parseArray('6')
-    expect(data).to.have.length(0)
+    _.forEach(testCases, test)
   })
 
-  it('handles a digit string with a minLength', () => {
-    parser.grammar = <DigitString minLength={2} />
+  describe('minLength', () => {
+    before(() => {
+      parser.grammar = <DigitString minLength={2} />
+    })
 
-    data = parser.parseArray('04')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('04')
-    expect(data[0].result).to.equal('04')
+    const testCases = [
+      {input: '0', placeholder: true},
+      {input: '1', placeholder: true},
+      {input: '00'},
+      {input: '01'},
+      {input: '029'},
+      {input: '222'}
+    ]
 
-    data = parser.parseArray('403')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('403')
-    expect(data[0].result).to.equal('403')
-
-    data = parser.parseArray('3')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('number')
-    expect(data[0].words[0].placeholder).to.be.true
+    _.forEach(testCases, test)
   })
 
-  it('handles a digit string with a maxLength', () => {
-    parser.grammar = <DigitString maxLength={3} />
+  describe('maxLength', () => {
+    before(() => {
+      parser.grammar = <DigitString maxLength={3} />
+    })
 
-    data = parser.parseArray('02')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('02')
-    expect(data[0].result).to.equal('02')
+    const testCases = [
+      {input: '0'},
+      {input: '1'},
+      {input: '00'},
+      {input: '01'},
+      {input: '029'},
+      {input: '222'},
+      {input: '0294', length: 0},
+      {input: '1294', length: 0}
+    ]
 
-    data = parser.parseArray('403')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('403')
-    expect(data[0].result).to.equal('403')
-
-    data = parser.parseArray('4032')
-    expect(data).to.have.length(0)
+    _.forEach(testCases, test)
   })
 
-  it('handles a digit string with a minLength and a maxLength', () => {
-    parser.grammar = <DigitString minLength={2} maxLength={4} />
+  describe('minLength/maxLength', () => {
+    before(() => {
+      parser.grammar = <DigitString minLength={2} maxLength={4} />
+    })
 
-    data = parser.parseArray('2')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('number')
-    expect(data[0].words[0].placeholder).to.be.true
+    const testCases = [
+      {input: '0', placeholder: true},
+      {input: '1', placeholder: true},
+      {input: '00'},
+      {input: '01'},
+      {input: '029'},
+      {input: '0294'},
+      {input: '1294'},
+      {input: '12940', length: 0},
+      {input: '02941', length: 0}
+    ]
 
-    data = parser.parseArray('03')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('03')
-    expect(data[0].result).to.equal('03')
-
-    data = parser.parseArray('440')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('440')
-    expect(data[0].result).to.equal('440')
-
-    data = parser.parseArray('4242')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('4242')
-    expect(data[0].result).to.equal('4242')
-
-    data = parser.parseArray('123456')
-    expect(data).to.have.length(0)
+    _.forEach(testCases, test)
   })
 
-  it('handles a digit string with a all validators', () => {
-    parser.grammar = <DigitString minLength={3} maxLength={4} min={10} max={8000} />
+  describe('min/max/minLength/maxLength', () => {
+    before(() => {
+      parser.grammar = <DigitString minLength={3} maxLength={5} min={50} max={8000} />
+    })
 
-    data = parser.parseArray('0002')
-    expect(data).to.have.length(0)
+    const testCases = [
+      {input: '0', placeholder: true},
+      {input: '1', placeholder: true},
+      {input: '00', placeholder: true},
+      {input: '40', placeholder: true},
+      {input: '40', placeholder: true},
+      {input: '60', placeholder: true},
+      {input: '060'},
+      {input: '600'},
+      {input: '6000'},
+      {input: '8000'},
+      {input: '06000'},
+      {input: '9000', length: 0},
+      {input: '16000', length: 0},
+      {input: '006000', length: 0},
+    ]
 
-    data = parser.parseArray('002')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('number')
-    expect(data[0].words[0].placeholder).to.be.true
-
-    let data = parser.parseArray('20')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('number')
-    expect(data[0].words[0].placeholder).to.be.true
-
-    data = parser.parseArray('100')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('100')
-    expect(data[0].result).to.equal('100')
-
-    data = parser.parseArray('0777')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('0777')
-    expect(data[0].result).to.equal('0777')
-
-    data = parser.parseArray('7000')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('7000')
-    expect(data[0].result).to.equal('7000')
-
-    data = parser.parseArray('8500')
-    expect(data).to.have.length(0)
-
-    data = parser.parseArray('07500')
-    expect(data).to.have.length(0)
+    _.forEach(testCases, test)
   })
 
-  it('rejects leading zeros with allowLeadingZeros', () => {
-    parser.grammar = <DigitString allowLeadingZeros={false} />
+  describe('allowLeadingZeros', () => {
+    before(() => {
+      parser.grammar = <DigitString allowLeadingZeros={false} />
+    })
 
-    data = parser.parseArray('02')
-    expect(data).to.have.length(0)
+    const testCases = [
+      {input: '0'},
+      {input: '00', length: 0},
+      {input: '01', length: 0},
+      {input: '10'}
+    ]
 
-    data = parser.parseArray('20')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('20')
-    expect(data[0].result).to.equal('20')
-
-    data = parser.parseArray('0')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('0')
-    expect(data[0].result).to.equal('0')
+    _.forEach(testCases, test)
   })
 })

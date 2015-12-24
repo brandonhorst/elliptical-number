@@ -14,85 +14,115 @@ function text(input) {
 describe('Ordinal', () => {
   let parser, data
 
-  beforeEach(() => {
+  before(() => {
     parser = new Parser()
   })
 
-  it('handles an Ordinal with no min/max', () => {
-    parser.grammar = <Ordinal />
+  function test({input, text, placeholder, result, length = 1}) {
+    if (text == null)  {
+      text = placeholder ? 'number' : input
+    }
 
-    data = parser.parseArray('1st')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('1st')
-    expect(data[0].result).to.equal(1)
+    it(input, () => {
+      const data = parser.parseArray(input)
+      expect(data, input).to.have.length(length)
+      if (length >= 1) {
+        expect(data[0].words[0].text, input).to.equal(text)
+        expect(data[0].result, input).to.equal(result)
+        expect(data[0].words[0].placeholder, input).to.equal(placeholder)
+      }
+    })
+  }
 
-    data = parser.parseArray('123rd')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('123rd')
-    expect(data[0].result).to.equal(123)
+  describe('default', () => {
+    before(() => {
+      parser.grammar = <Ordinal />
+    })
 
-    data = parser.parseArray('123f')
-    expect(data).to.have.length(0)
+    const testCases = [
+      {input: '0', length: 0},
+      {input: '01', length: 0},
+      {input: '01s', length: 0},
+      {input: '01st', length: 0},
+      {input: '1', placeholder: true},
+      {input: '145', placeholder: true},
+      {input: '1s', placeholder: true},
+      {input: '1s', placeholder: true},
+      {input: '2n', placeholder: true},
+      {input: '3r', placeholder: true},
+      {input: '4t', placeholder: true},
+      {input: '4n', length: 0},
+      {input: '4s', length: 0},
+      {input: '4r', length: 0},
+      {input: '1st', result: 1},
+      {input: '2nd', result: 2},
+      {input: '3rd', result: 3},
+      {input: '4th', result: 4},
+      {input: '11th', result: 11},
+      {input: '12th', result: 12},
+      {input: '13th', result: 13},
+      {input: '14th', result: 14},
+      {input: '123rd', result: 123},
+      {input: '123f', length: 0}
+    ]
+
+    _.forEach(testCases, test)
   })
 
-  it('handles an Ordinal with a min', () => {
-    parser.grammar = <Ordinal min={5} />
+  describe('min', () => {
+    before(() => {
+      parser.grammar = <Ordinal min={5} />
+    })
 
-    data = parser.parseArray('7th')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('7th')
-    expect(data[0].result).to.equal(7)
+    const testCases = [
+      {input: '1', placeholder: true},
+      {input: '1s', length: 0},
+      {input: '1st', length: 0},
+      {input: '4th', length: 0},
+      {input: '5th', result: 5},
+      {input: '6th', result: 6},
+      {input: '36th', result: 36}
+    ]
 
-    data = parser.parseArray('5th')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('5th')
-    expect(data[0].result).to.equal(5)
-
-    data = parser.parseArray('3rd')
-    expect(data).to.have.length(0)
+    _.forEach(testCases, test)
   })
 
-  it('handles an Ordinal with a max', () => {
-    parser.grammar = <Ordinal max={5} />
+  describe('max', () => {
+    before(() => {
+      parser.grammar = <Ordinal max={5} />
+    })
 
-    data = parser.parseArray('3rd')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('3rd')
-    expect(data[0].result).to.equal(3)
+    const testCases = [
+      {input: '1st', result: 1},
+      {input: '4th', result: 4},
+      {input: '5th', result: 5},
+      {input: '6', length: 0},
+      {input: '6t', length: 0},
+      {input: '6th', length: 0},
+      {input: '15', length: 0},
+      {input: '15t', length: 0},
+      {input: '15th', length: 0}
+    ]
 
-    data = parser.parseArray('5th')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('5th')
-    expect(data[0].result).to.equal(5)
-
-    data = parser.parseArray('7th')
-    expect(data).to.have.length(0)
+    _.forEach(testCases, test)
   })
 
-  it('handles an integer with a min and a max', () => {
-    parser.grammar = <Ordinal min={30} max={70} />
+  describe('min/max', () => {
+    before(() => {
+      parser.grammar = <Ordinal min={3} max={7} />
+    })
 
-    data = parser.parseArray('30th')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('30th')
-    expect(data[0].result).to.equal(30)
+    const testCases = [
+      {input: '1', placeholder: true}, // TODO
+      {input: '1s', length: 0},
+      {input: '2nd', length: 0},
+      {input: '3rd', result: 3},
+      {input: '6th', result: 6},
+      {input: '7th', result: 7},
+      {input: '8th', length: 0},
+      {input: '89', length: 0}
+    ]
 
-    data = parser.parseArray('3')
-    expect(text(data[0])).to.equal('nth')
-    expect(data[0].words[0].placeholder).to.be.true
-    expect(data).to.have.length(1)
-
-    data = parser.parseArray('40th')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('40th')
-    expect(data[0].result).to.equal(40)
-
-    data = parser.parseArray('70th')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('70th')
-    expect(data[0].result).to.equal(70)
-
-    data = parser.parseArray('600th')
-    expect(data).to.have.length(0)
+    _.forEach(testCases, test)
   })
 })

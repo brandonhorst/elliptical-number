@@ -7,98 +7,172 @@ import {Integer} from '..'
 import {expect} from 'chai'
 import {Parser} from 'lacona'
 
-function text(input) {
-  return _.map(input.words, 'text').join('')
-}
-
 describe('Integer', () => {
   let parser, data
 
-  beforeEach(() => {
+  before(() => {
     parser = new Parser()
   })
 
-  it('handles an integer with no min/max', () => {
-    parser.grammar = <Integer />
+  function test({input, text, placeholder, result, length = 1}) {
+    if (text == null)  {
+      text = placeholder ? 'number' : input
+    }
+    
+    it(input, () => {
+      const data = parser.parseArray(input)
+      expect(data, input).to.have.length(length)
+      if (length >= 1) {
+        expect(data[0].words[0].text, input).to.equal(text)
+        expect(data[0].result, input).to.equal(result)
+        expect(data[0].words[0].placeholder, input).to.equal(placeholder)
+      }
+    })
+  }
 
-    data = parser.parseArray('1')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('1')
-    expect(data[0].result).to.equal(1)
+  describe('incomplete', () => {
+    before(() => {
+      parser.grammar = <Integer />
+    })
 
-    data = parser.parseArray('123')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('123')
-    expect(data[0].result).to.equal(123)
+    const testCases = [
+      {input: '', placeholder: true},
+      {input: '-', placeholder: true},
+      {input: '+', placeholder: true},
+      {input: '0', result: 0},
+      {input: '-0', result: 0},
+      {input: '+0', result: 0},
+    ]
 
-    data = parser.parseArray('123f')
-    expect(data).to.have.length(0)
+    _.forEach(testCases, test)
   })
 
-  it('handles an Integer with a min', () => {
-    parser.grammar = <Integer min={5} />
+  describe('default', () => {
+    before(() => {
+      parser.grammar = <Integer />
+    })
 
-    data = parser.parseArray('7')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('7')
-    expect(data[0].result).to.equal(7)
+    const testCases = [
+      {input: '1', result: 1},
+      {input: '-1', result: -1},
+      {input: '123', result: 123},
+      {input: '-123', result: -123},
+      {input: '+123', result: 123},
+      {input: '0', result: 0},
+      {input: '-0', result: 0},
+      {input: 'f3', length: 0},
+      {input: '-f3', length: 0},
+      {input: '3f', length: 0},
+      {input: '-3f', length: 0},
+      {input: '3+', length: 0},
+      {input: '3-', length: 0},
+      {input: '3+3', length: 0}
+    ]
 
-    data = parser.parseArray('5')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('5')
-    expect(data[0].result).to.equal(5)
-
-    data = parser.parseArray('3')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('number')
-    expect(data[0].words[0].placeholder).to.be.true
+    _.forEach(testCases, test)
   })
 
-  it('handles an Integer with a max', () => {
-    parser.grammar = <Integer max={5} />
+  describe('handles an Integer with a min', () => {
+    before(() => {
+      parser.grammar = <Integer min={50} />
+    })
 
-    data = parser.parseArray('3')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('3')
-    expect(data[0].result).to.equal(3)
+    const testCases = [
+      {input: '1', placeholder: true},
+      {input: '49', placeholder: true},
+      {input: '-1', length: 0},
+      {input: '-51', length: 0},
+      {input: '50', result: 50},
+      {input: '61', result: 61},
+      {input: '500', result: 500}
+    ]
 
-    data = parser.parseArray('5')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('5')
-    expect(data[0].result).to.equal(5)
-
-    data = parser.parseArray('7')
-    expect(data).to.have.length(0)
+    _.forEach(testCases, test)
   })
 
-  it('handles an integer with a min and a max', () => {
-    parser.grammar = <Integer min={30} max={70} />
+  describe('handles an Integer with a max', () => {
+    before(() => {
+      parser.grammar = <Integer max={50} />
+    })
 
-    data = parser.parseArray('2')
-    // TODO if we were being really good, this would return no resuts.
-    // There is no combination of characters that you can enter after 2
-    // that would make this a valid input. 29 is too low, 200 is too high.
-    // however, this behavior is fine for now
-    expect(text(data[0])).to.equal('number')
-    expect(data[0].words[0].placeholder).to.be.true
-    expect(data).to.have.length(1)
+    const testCases = [
+      {input: '1', result: 1},
+      {input: '50', result: 50},
+      {input: '51', length: 0},
+      {input: '-1', result: -1},
+      {input: '-51', result: -51}
+    ]
 
-    data = parser.parseArray('3')
-    expect(text(data[0])).to.equal('number')
-    expect(data[0].words[0].placeholder).to.be.true
-    expect(data).to.have.length(1)
+    _.forEach(testCases, test)
+  })
 
-    data = parser.parseArray('40')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('40')
-    expect(data[0].result).to.equal(40)
+  describe('handles an integer with a min and a max (both positive)', () => {
+    before(() => {
+      parser.grammar = <Integer min={30} max={70} />
+    })
 
-    data = parser.parseArray('70')
-    expect(data).to.have.length(1)
-    expect(text(data[0])).to.equal('70')
-    expect(data[0].result).to.equal(70)
+    const testCases = [
+      {input: '1', placeholder: true},
+      {input: '0', placeholder: true},
+      {input: '8', placeholder: true}, //TODO this could be improved see below
+      {input: '30', result: 30},
+      {input: '50', result: 50},
+      {input: '70', result: 70},
+      {input: '71', length: 0},
+      {input: '+50', result: 50},
+      {input: '+70', result: 70},
+      {input: '+71', length: 0},
+      {input: '-0', length: 0},
+      {input: '-1', length: 0},
+      {input: '-51', length: 0},
+      {input: '-71', length: 0}
+    ]
 
-    data = parser.parseArray('600')
-    expect(data).to.have.length(0)
+    _.forEach(testCases, test)
+  })
+
+  describe('handles an integer with a min and a max (both negative)', () => {
+    before(() => {
+      parser.grammar = <Integer min={-70} max={-30} />
+    })
+
+    const testCases = [
+      {input: '-1', placeholder: true},
+      {input: '-0', placeholder: true},
+      {input: '-8', placeholder: true}, //TODO this could be improved see below
+      {input: '-30', result: -30},
+      {input: '-50', result: -50},
+      {input: '-70', result: -70},
+      {input: '-71', length: 0},
+      {input: '0', length: 0},
+      {input: '+0', length: 0},
+      {input: '+1', length: 0},
+      {input: '1', length: 0},
+      {input: '51', length: 0},
+      {input: '71', length: 0}
+    ]
+
+    _.forEach(testCases, test)
+  })
+
+  describe('handles an integer with a min and a max (straddling 0)', () => {
+    before(() => {
+      parser.grammar = <Integer min={-50} max={50} />
+    })
+
+    const testCases = [
+      {input: '1', result: 1},
+      {input: '-1', result: -1},
+      {input: '-0', result: 0},
+      {input: '0', result: 0},
+      {input: '-30', result: -30},
+      {input: '-50', result: -50},
+      {input: '-70', length: 0},
+      {input: '30', result: 30},
+      {input: '50', result: 50},
+      {input: '70', length: 0}
+    ]
+
+    _.forEach(testCases, test)
   })
 })

@@ -14,7 +14,7 @@ npm install lacona-phrase-number
 ## Usage
 
 ```js
-import { DigitString, Integer, Ordinal } from 'lacona-phrase-number'
+import { DigitString, Integer, Ordinal, Decimal } from 'lacona-phrase-number'
 import { Parser } from 'lacona'
 
 const parser = new Parser({
@@ -84,3 +84,17 @@ Accepts numbers specified in ordinal form. That is, numbers like 1st, 3rd, 12th,
 - `argument`: `String` - The label text for this phrase. Defaults to `number`.
 - `max`: `Number` - the highest acceptable integer. No limit by default.
 - `min`: `Number` - the lowest acceptable integer. No limit by default.
+
+### `Decimal`
+
+Accepts a fixed-point decimal specified numerically. These can be negative. Leading zero is optional.
+
+#### Result
+
+`Number` - A numeric representation of the input number.
+
+#### Props
+
+- `argument`: `String` - The label text for this phrase. Defaults to `number`.
+- `max`: `Number` - the highest acceptable decimal. No limit by default.
+- `min`: `Number` - the lowest acceptable decimal. No limit by default.

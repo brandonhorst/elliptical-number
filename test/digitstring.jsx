@@ -2,32 +2,27 @@
 /* eslint-env mocha */
 
 import _ from 'lodash'
-import { createElement, Phrase } from 'lacona-phrase'
-import { DigitString } from '..'
-import { expect } from 'chai'
-import { Parser } from 'lacona'
+import {createElement, createParser} from 'elliptical'
+import DigitString from '../src/digitstring'
+import {expect} from 'chai'
 
 function text(input) {
   return _.map(input.words, 'text').join('')
 }
 
 describe('DigitString', () => {
-  let parser
-
-  before(() => {
-    parser = new Parser()
-  })
+  let parse
 
   function test({input, text, placeholder, result, length = 1}) {
     if (text == null)  {
-      text = placeholder ? 'number' : input
+      text = placeholder ? 'digit string' : input
     }
     if (result == null) {
       result = placeholder ? undefined : text
     }
 
     it(input, () => {
-      const data = parser.parseArray(input)
+      const data = parse(input)
       expect(data, input).to.have.length(length)
       if (length >= 1) {
         expect(data[0].words[0].text, input).to.equal(text)
@@ -39,7 +34,7 @@ describe('DigitString', () => {
 
   describe('default', () => {
     before(() => {
-      parser.grammar = <DigitString />
+      ({parse} = createParser(<DigitString />))
     })
 
     const testCases = [
@@ -57,7 +52,7 @@ describe('DigitString', () => {
 
   describe('min', () => {
     before(() => {
-      parser.grammar = <DigitString min={50} />
+      ({parse} = createParser(<DigitString min={50} />))
     })
 
     const testCases = [
@@ -77,7 +72,7 @@ describe('DigitString', () => {
 
   describe('max', () => {
     before(() => {
-      parser.grammar = <DigitString max={50} />
+      ({parse} = createParser(<DigitString max={50} />))
     })
 
     const testCases = [
@@ -96,7 +91,7 @@ describe('DigitString', () => {
 
   describe('min/max', () => {
     before(() => {
-      parser.grammar = <DigitString min={30} max={70} />
+      ({parse} = createParser(<DigitString min={30} max={70} />))
     })
 
     const testCases = [
@@ -117,7 +112,7 @@ describe('DigitString', () => {
 
   describe('minLength', () => {
     before(() => {
-      parser.grammar = <DigitString minLength={2} />
+      ({parse} = createParser(<DigitString minLength={2} />))
     })
 
     const testCases = [
@@ -134,7 +129,7 @@ describe('DigitString', () => {
 
   describe('maxLength', () => {
     before(() => {
-      parser.grammar = <DigitString maxLength={3} />
+      ({parse} = createParser(<DigitString maxLength={3} />))
     })
 
     const testCases = [
@@ -153,7 +148,7 @@ describe('DigitString', () => {
 
   describe('minLength/maxLength', () => {
     before(() => {
-      parser.grammar = <DigitString minLength={2} maxLength={4} />
+      ({parse} = createParser(<DigitString minLength={2} maxLength={4} />))
     })
 
     const testCases = [
@@ -173,7 +168,7 @@ describe('DigitString', () => {
 
   describe('min/max/minLength/maxLength', () => {
     before(() => {
-      parser.grammar = <DigitString minLength={3} maxLength={5} min={50} max={8000} />
+      ({parse} = createParser(<DigitString minLength={3} maxLength={5} min={50} max={8000} />))
     })
 
     const testCases = [
@@ -198,7 +193,7 @@ describe('DigitString', () => {
 
   describe('allowLeadingZeros', () => {
     before(() => {
-      parser.grammar = <DigitString allowLeadingZeros={false} />
+      ({parse} = createParser(<DigitString allowLeadingZeros={false} />))
     })
 
     const testCases = [

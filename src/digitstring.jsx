@@ -1,59 +1,55 @@
 /** @jsx createElement */
-import {createElement, Phrase} from 'lacona-phrase'
+import {createElement} from 'elliptical'
 import _ from 'lodash'
 
 function isNumeric (input) {
   return /^\d+$/.test(input)
 }
 
-export default class DigitString extends Phrase {
-  static defaultProps = {
-    minLength: 1,
-    maxLength: 9007199254740991,
-    min: 0,
-    max: 9007199254740991,
-    allowLeadingZeros: true,
-    argument: 'number'
-  }
+function suppressWhen (input, props) {
+  if (!isNumeric(input)) return false
 
-  validate (result) {
-    if (result.length > this.props.maxLength) return false
-    if (result.length < this.props.minLength) return false
+  if (!props.allowLeadingZeros && input !== '0' && _.startsWith(input, '0')) return false
 
-    if (!this.props.allowLeadingZeros && result !== '0' && _.startsWith(result, '0')) return false
+  if (input.length < props.minLength) return true
 
-    const intValue = parseInt(result, 10)
-    if (isNaN(intValue)) return false
-    if (intValue > this.props.max) return false
-    if (intValue < this.props.min) return false
-
-    return true
-  }
-
-  suppressWhen (input) {
-    if (!isNumeric(input)) return false
-
-    if (!this.props.allowLeadingZeros && input !== '0' && _.startsWith(input, '0')) return false
-
-    if (input.length < this.props.minLength) return true
-
-    const intValue = parseInt(input, 10)
-    if (intValue < this.props.min) return true
-    //
-    // const lowestOneMoreDigit = `${input}0`
-    // if (lowestOneMoreDigit.length > this.props.maxLength) return false
-    //
-    // const lowestOneMoreDigitIntValue = parseInt(lowestOneMoreDigit, 10)
-    // if (lowestOneMoreDigitIntValue > this.props.max) return false
-    //
-    return false
-  }
-
-  describe () {
-    return (
-      <label text={this.props.argument} suppressWhen={this.suppressWhen.bind(this)} suppressEmpty>
-        <freetext filter={isNumeric} splitOn={/\D/} score={1} />
-      </label>
-    )
-  }
+  const intValue = parseInt(input, 10)
+  if (intValue < props.min) return true
+  return false
 }
+
+const defaultProps = {
+  minLength: 1,
+  maxLength: 9007199254740991,
+  min: 0,
+  max: 9007199254740991,
+  allowLeadingZeros: true,
+  argument: 'digit string'
+}
+
+function validate (result, {props}) {
+  if (result.length > props.maxLength) return false
+  if (result.length < props.minLength) return false
+
+  if (!props.allowLeadingZeros && result !== '0' && _.startsWith(result, '0')) return false
+
+  const intValue = parseInt(result, 10)
+  if (isNaN(intValue)) return false
+  if (intValue > props.max) return false
+  if (intValue < props.min) return false
+
+  return true
+}
+
+function describe ({props}) {
+  return (
+    <label
+      text={props.argument}
+      suppressWhen={(input) => suppressWhen(input, props)}
+      suppressEmpty>
+      <freetext filter={isNumeric} splitOn={/\D/} score={1} />
+    </label>
+  )
+}
+
+export default {defaultProps, validate, describe}

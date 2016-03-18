@@ -2,7 +2,7 @@
 /* eslint-env mocha */
 
 import _ from 'lodash'
-import {createElement, createParser} from 'elliptical'
+import {createElement, compile} from 'elliptical'
 import Decimal from '../src/decimal'
 import {expect} from 'chai'
 
@@ -27,7 +27,7 @@ describe('Decimal', () => {
 
   describe('incomplete', () => {
     before(() => {
-      ({parse} = createParser(<Decimal />))
+      parse = compile(<Decimal />)
     })
 
     const testCases = [
@@ -50,7 +50,7 @@ describe('Decimal', () => {
 
   describe('default', () => {
     before(() => {
-      ({parse} = createParser(<Decimal />))
+      parse = compile(<Decimal />)
     })
 
     const testCases = [
@@ -90,7 +90,7 @@ describe('Decimal', () => {
 
   describe('handles an Decimal with an integer min', () => {
     before(() => {
-      ({parse} = createParser(<Decimal min={50} />))
+      parse = compile(<Decimal min={50} />)
     })
 
     const testCases = [
@@ -111,7 +111,7 @@ describe('Decimal', () => {
 
   describe('handles an Decimal with an decimal min', () => {
     before(() => {
-      ({parse} = createParser(<Decimal min={50.1} />))
+      parse = compile(<Decimal min={50.1} />)
     })
 
     const testCases = [
@@ -134,7 +134,7 @@ describe('Decimal', () => {
 
   describe('handles an Decimal with an integer max', () => {
     before(() => {
-      ({parse} = createParser(<Decimal max={50} />))
+      parse = compile(<Decimal max={50} />)
     })
 
     const testCases = [
@@ -152,7 +152,7 @@ describe('Decimal', () => {
 
   describe('handles an Decimal with a decimal max', () => {
     before(() => {
-      ({parse} = createParser(<Decimal max={50.1} />))
+      parse = compile(<Decimal max={50.1} />)
     })
 
     const testCases = [
@@ -172,7 +172,7 @@ describe('Decimal', () => {
   // TODO add more decimal equivalent tests //
   describe('handles an integer with a min and a max (both positive)', () => {
     before(() => {
-      ({parse} = createParser(<Decimal min={30} max={70} />))
+      parse = compile(<Decimal min={30} max={70} />)
     })
 
     const testCases = [
@@ -197,7 +197,7 @@ describe('Decimal', () => {
 
   describe('handles an integer with a min and a max (both negative)', () => {
     before(() => {
-      ({parse} = createParser(<Decimal min={-70} max={-30} />))
+      parse = compile(<Decimal min={-70} max={-30} />)
     })
 
     const testCases = [
@@ -221,7 +221,7 @@ describe('Decimal', () => {
 
   describe('handles an integer with a min and a max (straddling 0)', () => {
     before(() => {
-      ({parse} = createParser(<Decimal min={-50} max={50} />))
+      parse = compile(<Decimal min={-50} max={50} />)
     })
 
     const testCases = [

@@ -2,7 +2,7 @@
 /* eslint-env mocha */
 
 import _ from 'lodash'
-import {createElement, createParser} from 'elliptical'
+import {createElement, compile} from 'elliptical'
 import Ordinal from '../src/ordinal'
 import {expect} from 'chai'
 
@@ -30,7 +30,7 @@ describe('Ordinal', () => {
 
   describe('default', () => {
     beforeEach(() => {
-      ({parse} = createParser(<Ordinal />))
+      parse = compile(<Ordinal />)
     })
 
     const testCases = [
@@ -65,7 +65,7 @@ describe('Ordinal', () => {
 
   describe('min', () => {
     before(() => {
-      ({parse} = createParser(<Ordinal min={5} />))
+      parse = compile(<Ordinal min={5} />)
     })
 
     const testCases = [
@@ -83,7 +83,7 @@ describe('Ordinal', () => {
 
   describe('max', () => {
     before(() => {
-      ({parse} = createParser(<Ordinal max={5} />))
+      parse = compile(<Ordinal max={5} />)
     })
 
     const testCases = [
@@ -103,7 +103,7 @@ describe('Ordinal', () => {
 
   describe('min/max', () => {
     before(() => {
-      ({parse} = createParser(<Ordinal min={3} max={7} />))
+      parse = compile(<Ordinal min={3} max={7} />)
     })
 
     const testCases = [

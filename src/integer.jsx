@@ -41,7 +41,7 @@ const defaultProps = {
   limit: 1
 }
 
-function validate (result, {props}) {
+function filterResult (result, {props}) {
   return result <= props.max && result >= props.min
 }
 
@@ -56,4 +56,4 @@ function describe ({props}) {
   )
 }
 
-export default {defaultProps, validate, describe}
+export default {defaultProps, filterResult, describe}

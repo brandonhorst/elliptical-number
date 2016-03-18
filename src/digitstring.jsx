@@ -27,7 +27,7 @@ const defaultProps = {
   argument: 'digit string'
 }
 
-function validate (result, {props}) {
+function filterResult (result, {props}) {
   if (result.length > props.maxLength) return false
   if (result.length < props.minLength) return false
 
@@ -52,4 +52,4 @@ function describe ({props}) {
   )
 }
 
-export default {defaultProps, validate, describe}
+export default {defaultProps, filterResult, describe}

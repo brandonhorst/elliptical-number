@@ -6,7 +6,7 @@
     "url": "https://github.com/brandonhorst/elliptical-number/issues"
   },
   "dependencies": {
-    "elliptical": "^1.0.0-rc1",
+    "elliptical": "^1.0.0-rc4",
     "lodash": "^4.6.1"
   },
   "description": "Elliptical phrases for numbers (Integer, Decimal, DigitString, Ordinal)",

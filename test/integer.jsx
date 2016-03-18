@@ -2,7 +2,7 @@
 /* eslint-env mocha */
 
 import _ from 'lodash'
-import {createElement, createParser} from 'elliptical'
+import {createElement, compile} from 'elliptical'
 import Integer from '../src/integer'
 import {expect} from 'chai'
 
@@ -27,7 +27,7 @@ describe('Integer', () => {
 
   describe('incomplete', () => {
     before(() => {
-      ({parse} = createParser(<Integer />))
+      parse = compile(<Integer />)
     })
 
     const testCases = [
@@ -44,7 +44,7 @@ describe('Integer', () => {
 
   describe('default', () => {
     before(() => {
-      ({parse} = createParser(<Integer />))
+      parse = compile(<Integer />)
     })
 
     const testCases = [
@@ -69,7 +69,7 @@ describe('Integer', () => {
 
   describe('handles an Integer with a min', () => {
     before(() => {
-      ({parse} = createParser(<Integer min={50} />))
+      parse = compile(<Integer min={50} />)
     })
 
     const testCases = [
@@ -87,7 +87,7 @@ describe('Integer', () => {
 
   describe('handles an Integer with a max', () => {
     before(() => {
-      ({parse} = createParser(<Integer max={50} />))
+      parse = compile(<Integer max={50} />)
     })
 
     const testCases = [
@@ -103,7 +103,7 @@ describe('Integer', () => {
 
   describe('handles an integer with a min and a max (both positive)', () => {
     before(() => {
-      ({parse} = createParser(<Integer min={30} max={70} />))
+      parse = compile(<Integer min={30} max={70} />)
     })
 
     const testCases = [
@@ -128,7 +128,7 @@ describe('Integer', () => {
 
   describe('handles an integer with a min and a max (both negative)', () => {
     before(() => {
-      ({parse} = createParser(<Integer min={-70} max={-30} />))
+      parse = compile(<Integer min={-70} max={-30} />)
     })
 
     const testCases = [
@@ -152,7 +152,7 @@ describe('Integer', () => {
 
   describe('handles an integer with a min and a max (straddling 0)', () => {
     before(() => {
-      ({parse} = createParser(<Integer min={-50} max={50} />))
+      parse = compile(<Integer min={-50} max={50} />)
     })
 
     const testCases = [

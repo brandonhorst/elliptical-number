@@ -16,9 +16,9 @@ npm install elliptical-number
 ```js
 /** @jsx createElement */
 import { DigitString, Integer, Ordinal, Decimal } from 'elliptical-number'
-import { createParser, createElement } from 'elliptical'
+import { createElement, compile } from 'elliptical'
 
-const {parse} = new createParser(
+const parse = new compile(
   <sequence>
     <Integer max={99} min={0} id='numBottles' />
     <literal text=' bottles of beer on the wall' />

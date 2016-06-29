@@ -3,43 +3,56 @@
     "name": "@brandonhorst"
   },
   "bugs": {
-    "url": "https://github.com/brandonhorst/lacona-phrase-number/issues"
+    "url": "https://github.com/brandonhorst/elliptical-number/issues"
   },
   "dependencies": {
-    "lacona-phrase": "^0.9.1",
-    "lodash": "^3.10.1"
+    "elliptical": "^1.0.0-rc16",
+    "lodash": "^4.6.1"
   },
-  "description": "Enable Lacona to parse numbers, including integers, floats, ane more",
+  "description": "Elliptical phrases for numbers (Integer, Decimal, DigitString, Ordinal)",
   "devDependencies": {
-    "babel": "^5.1.11",
-    "chai": "^3.4.1",
-    "lacona": "^0.34.0",
-    "lacona-util-fulltext": "^0.2.0",
-    "mocha": "^2.3.4",
-    "rimraf": "^2.5.0"
+    "babel-cli": "^6.6.5",
+    "babel-plugin-transform-react-jsx": "^6.6.5",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-register": "^6.7.2",
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "rimraf": "^2.5.2"
   },
-  "homepage": "https://github.com/brandonhorst/lacona-phrase-number",
+  "homepage": "https://github.com/brandonhorst/elliptical-number",
   "keywords": [
     "float",
+    "decimal",
+    "ordinal",
+    "digit string",
+    "digits",
+    "code",
+    "zip code",
     "integer",
-    "lacona",
+    "elliptical",
     "number"
   ],
   "license": "MIT",
   "main": "lib/index.js",
-  "name": "lacona-phrase-number",
+  "name": "elliptical-number",
   "optionalDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brandonhorst/lacona-phrase-datetime.git"
+    "url": "git+https://github.com/brandonhorst/elliptical-number.git"
   },
   "scripts": {
-    "build": "babel --stage 0 src --out-dir lib",
-    "clean": "rimraf lib tmp",
-    "prepublish": "npm run clean && npm run build",
-    "pretest": "babel --stage 0 test --out-dir tmp",
-    "test": "mocha tmp",
-    "validate": "npm run build && npm test"
+    "test": "mocha --compilers jsx:babel-register --watch-extensions jsx",
+    "build": "mkdir -p build; babel src --out-dir lib",
+    "clean": "rimraf lib",
+    "prepublish": "npm run clean && npm run build"
   },
-  "version": "0.7.0"
+  "version": "1.0.0-rc3",
+  "babel": {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "transform-react-jsx"
+    ]
+  }
 }

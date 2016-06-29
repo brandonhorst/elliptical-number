@@ -1,32 +1,31 @@
-lacona-phrase-number
+elliptical-number
 ====================
 
-[![Build Status](https://travis-ci.org/lacona/lacona-phrase-number.svg?branch=master)](https://travis-ci.org/lacona/lacona-phrase-number)
+[![Build Status](https://travis-ci.org/laconalabs/elliptical-number.svg?branch=master)](https://travis-ci.org/lacona-labs/elliptical-number)
 
-Enable Lacona to parse integers, strings of digits, and ordinals.
+Elliptical phrases for numbers (Integer, Decimal, DigitString, Ordinal)
 
 ## Installation
 
 ```sh
-npm install lacona-phrase-number
+npm install elliptical-number
 ```
 
 ## Usage
 
 ```js
-import { DigitString, Integer, Ordinal, Decimal } from 'lacona-phrase-number'
-import { Parser } from 'lacona'
+/** @jsx createElement */
+import { DigitString, Integer, Ordinal, Decimal } from 'elliptical-number'
+import { createElement, compile } from 'elliptical'
 
-const parser = new Parser({
-  grammar: (
-    <sequence>
-      <Integer max={99} min={0} id='numBottles' />
-      <literal text=' bottles of beer on the wall' />
-    </sequence>
-  )
+const parse = new compile(
+  <sequence>
+    <Integer max={99} min={0} id='numBottles' />
+    <literal text=' bottles of beer on the wall' />
+  </sequence>
 }
 
-parser.parseArray('73 bottles of beer on the wall')
+parse('73 bottles of beer on the wall')
 /* [{
   words: [
     {text: '73', input: true, argument: 'number'},

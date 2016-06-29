@@ -2,29 +2,23 @@
 /* eslint-env mocha */
 
 import _ from 'lodash'
-import {createElement, Phrase} from 'lacona-phrase'
-import {Ordinal} from '..'
+import {createElement, compile} from 'elliptical'
+import Ordinal from '../src/ordinal'
 import {expect} from 'chai'
-import {Parser} from 'lacona'
 
 function text(input) {
   return _.map(input.words, 'text').join('')
 }
 
 describe('Ordinal', () => {
-  let parser, data
-
-  before(() => {
-    parser = new Parser()
-  })
-
+  let parse
   function test({input, text, placeholder, result, length = 1}) {
     if (text == null)  {
-      text = placeholder ? 'number' : input
+      text = placeholder ? 'ordinal' : input
     }
 
     it(input, () => {
-      const data = parser.parseArray(input)
+      const data = parse(input)
       expect(data, input).to.have.length(length)
       if (length >= 1) {
         expect(data[0].words[0].text, input).to.equal(text)
@@ -35,8 +29,8 @@ describe('Ordinal', () => {
   }
 
   describe('default', () => {
-    before(() => {
-      parser.grammar = <Ordinal />
+    beforeEach(() => {
+      parse = compile(<Ordinal />)
     })
 
     const testCases = [
@@ -71,7 +65,7 @@ describe('Ordinal', () => {
 
   describe('min', () => {
     before(() => {
-      parser.grammar = <Ordinal min={5} />
+      parse = compile(<Ordinal min={5} />)
     })
 
     const testCases = [
@@ -89,7 +83,7 @@ describe('Ordinal', () => {
 
   describe('max', () => {
     before(() => {
-      parser.grammar = <Ordinal max={5} />
+      parse = compile(<Ordinal max={5} />)
     })
 
     const testCases = [
@@ -109,7 +103,7 @@ describe('Ordinal', () => {
 
   describe('min/max', () => {
     before(() => {
-      parser.grammar = <Ordinal min={3} max={7} />
+      parse = compile(<Ordinal min={3} max={7} />)
     })
 
     const testCases = [

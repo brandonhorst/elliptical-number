@@ -1,6 +1,7 @@
 /** @jsx createElement */
+
 import _ from 'lodash'
-import {createElement, Phrase} from 'lacona-phrase'
+import {createElement} from 'elliptical'
 
 const MAX_SAFE_INTEGER = Math.pow(2, 53) - 1;
 
@@ -18,44 +19,47 @@ function completeOrdinal (input) {
   return /^(?:\d+th|\d+t|\d*1st|\d*2nd|\d*3rd)$/.test(input)
 }
 
-export default class Ordinal extends Phrase {
-  static defaultProps = {
-    max: MAX_SAFE_INTEGER,
-    min: 1,
-    argument: 'number'
-  }
-
-  getValue (result) {
-    return parseInt(result, 10)
-  }
-
-  validate (result) {
-    return result <= this.props.max && result >= this.props.min
-  }
-
-  filter (input) {
-    return completeOrdinal(input)
-  }
-
-  suppressWhen (input) {
-    const intValue = parseInt(input, 10)
-
-    if (pureNumber(input)) {
-      if (intValue < this.props.max) return true
-    } else if (incompleteOrdinal(input)) {
-      if (intValue <= this.props.max && intValue >= this.props.min) return true
-    }
-
-    return false
-  }
-
-  describe () {
-    return (
-      <label text={this.props.argument} suppressWhen={this.suppressWhen.bind(this)} suppressEmpty>
-        <map function={this.getValue.bind(this)}>
-          <freetext filter={completeOrdinal} limit={this.props.limit} splitOn={/[^0-9stndhr]/} score={1} />
-        </map>
-      </label>
-    )
-  }
+function getValue (option) {
+  return _.assign({}, option, {result: parseInt(option.result, 10)})
 }
+
+function suppressWhen (input, props) {
+  const intValue = parseInt(input, 10)
+
+  if (pureNumber(input)) {
+    if (intValue < props.max) return true
+  } else if (incompleteOrdinal(input)) {
+    if (intValue <= props.max && intValue >= props.min) return true
+  }
+
+  return false
+}
+
+const defaultProps = {
+  min: 1,
+  max: MAX_SAFE_INTEGER,
+  argument: 'ordinal'
+}
+
+function filterResult (result, {props}) {
+  return result <= props.max && result >= props.min
+}
+
+function describe ({props}) {
+  return (
+    <placeholder
+      text={props.argument}
+      suppressWhen={(input) => suppressWhen(input, props)}
+      suppressEmpty>
+      <map outbound={getValue} skipIncomplete>
+        <freetext
+          filter={completeOrdinal}
+          limit={props.limit}
+          splitOn={/[^0-9stndhr]/}
+          score={1} />
+      </map>
+    </placeholder>
+  )
+}
+
+export default {defaultProps, describe, filterResult}

@@ -2,25 +2,20 @@
 /* eslint-env mocha */
 
 import _ from 'lodash'
-import {createElement, Phrase} from 'lacona-phrase'
-import {Integer} from '..'
+import {createElement, compile} from 'elliptical'
+import Integer from '../src/integer'
 import {expect} from 'chai'
-import {Parser} from 'lacona'
 
 describe('Integer', () => {
-  let parser, data
-
-  before(() => {
-    parser = new Parser()
-  })
+  let parse
 
   function test({input, text, placeholder, result, length = 1}) {
     if (text == null)  {
-      text = placeholder ? 'number' : input
+      text = placeholder ? 'integer' : input
     }
     
     it(input, () => {
-      const data = parser.parseArray(input)
+      const data = parse(input)
       expect(data, input).to.have.length(length)
       if (length >= 1) {
         expect(data[0].words[0].text, input).to.equal(text)
@@ -32,7 +27,7 @@ describe('Integer', () => {
 
   describe('incomplete', () => {
     before(() => {
-      parser.grammar = <Integer />
+      parse = compile(<Integer />)
     })
 
     const testCases = [
@@ -49,7 +44,7 @@ describe('Integer', () => {
 
   describe('default', () => {
     before(() => {
-      parser.grammar = <Integer />
+      parse = compile(<Integer />)
     })
 
     const testCases = [
@@ -74,7 +69,7 @@ describe('Integer', () => {
 
   describe('handles an Integer with a min', () => {
     before(() => {
-      parser.grammar = <Integer min={50} />
+      parse = compile(<Integer min={50} />)
     })
 
     const testCases = [
@@ -92,7 +87,7 @@ describe('Integer', () => {
 
   describe('handles an Integer with a max', () => {
     before(() => {
-      parser.grammar = <Integer max={50} />
+      parse = compile(<Integer max={50} />)
     })
 
     const testCases = [
@@ -108,7 +103,7 @@ describe('Integer', () => {
 
   describe('handles an integer with a min and a max (both positive)', () => {
     before(() => {
-      parser.grammar = <Integer min={30} max={70} />
+      parse = compile(<Integer min={30} max={70} />)
     })
 
     const testCases = [
@@ -133,7 +128,7 @@ describe('Integer', () => {
 
   describe('handles an integer with a min and a max (both negative)', () => {
     before(() => {
-      parser.grammar = <Integer min={-70} max={-30} />
+      parse = compile(<Integer min={-70} max={-30} />)
     })
 
     const testCases = [
@@ -157,7 +152,7 @@ describe('Integer', () => {
 
   describe('handles an integer with a min and a max (straddling 0)', () => {
     before(() => {
-      parser.grammar = <Integer min={-50} max={50} />
+      parse = compile(<Integer min={-50} max={50} />)
     })
 
     const testCases = [

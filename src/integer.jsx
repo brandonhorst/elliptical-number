@@ -37,8 +37,8 @@ function suppressWhen (input, props) {
 const defaultProps = {
   max: MAX_SAFE_INTEGER,
   min: -MAX_SAFE_INTEGER,
-  argument: 'integer',
-  limit: 1
+  limit: 1,
+  label: 'integer'
 }
 
 function filterResult (result, {props}) {
@@ -47,8 +47,10 @@ function filterResult (result, {props}) {
 
 function describe ({props}) {
   return (
-    <placeholder text={props.argument}
-      suppressWhen={(input) => suppressWhen(input, props)} suppressEmpty>
+    <placeholder label={props.label}
+      arguments={props.phraseArguments || (props.phraseArguments ? [props.phraseArgument] : [props.label])}
+      suppressWhen={(input) => suppressWhen(input, props)}
+      suppressEmpty>
       <map outbound={getValue} skipIncomplete>
         <freetext filter={isSignedNumeric} limit={props.limit} splitOn={/\D/} score={1} />
       </map>

@@ -38,7 +38,7 @@ function suppressWhen (input, props) {
 const defaultProps = {
   min: 1,
   max: MAX_SAFE_INTEGER,
-  argument: 'ordinal'
+  label: 'ordinal'
 }
 
 function filterResult (result, {props}) {
@@ -48,7 +48,8 @@ function filterResult (result, {props}) {
 function describe ({props}) {
   return (
     <placeholder
-      text={props.argument}
+      label={props.label}
+      arguments={props.phraseArguments || (props.phraseArguments ? [props.phraseArgument] : [props.label])}
       suppressWhen={(input) => suppressWhen(input, props)}
       suppressEmpty>
       <map outbound={getValue} skipIncomplete>

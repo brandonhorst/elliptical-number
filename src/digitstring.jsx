@@ -24,7 +24,7 @@ const defaultProps = {
   min: 0,
   max: 9007199254740991,
   allowLeadingZeros: true,
-  argument: 'digit string'
+  label: 'digit string'
 }
 
 function filterResult (result, {props}) {
@@ -41,10 +41,16 @@ function filterResult (result, {props}) {
   return true
 }
 
+/*
+  you cannot actually set the "argument" property because of prepositions
+  USE LABEL
+*/
+
 function describe ({props}) {
   return (
     <placeholder
-      text={props.argument}
+      label={props.label}
+      arguments={props.phraseArguments || (props.phraseArguments ? [props.phraseArgument] : [props.label])}
       suppressWhen={(input) => suppressWhen(input, props)}
       suppressEmpty>
       <freetext filter={isNumeric} splitOn={/\D/} score={1} />

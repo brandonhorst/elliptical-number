@@ -62,7 +62,9 @@ function filterResult (result, {props}) {
 
 function describe ({props}) {
   return (
-    <placeholder text={props.argument}
+    <placeholder
+      label={props.label}
+      arguments={props.phraseArguments || (props.phraseArguments ? [props.phraseArgument] : [props.label])}
       suppressWhen={(input) => suppressWhen(input, props)}>
       <map outbound={getValue}>
         <freetext filter={isSignedDecimal} limit={props.limit}

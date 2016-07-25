@@ -11,7 +11,7 @@ describe('Integer', () => {
 
   function test({input, text, placeholder, result, length = 1}) {
     if (text == null)  {
-      text = placeholder ? 'integer' : input
+      text = placeholder ? undefined : input
     }
     
     it(input, () => {

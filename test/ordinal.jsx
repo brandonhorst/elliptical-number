@@ -14,7 +14,7 @@ describe('Ordinal', () => {
   let parse
   function test({input, text, placeholder, result, length = 1}) {
     if (text == null)  {
-      text = placeholder ? 'ordinal' : input
+      text = placeholder ? undefined : input
     }
 
     it(input, () => {
@@ -52,12 +52,14 @@ describe('Ordinal', () => {
       {input: '2nd', result: 2},
       {input: '3rd', result: 3},
       {input: '4th', result: 4},
+      {input: 'fourth', result: 4},
       {input: '11th', result: 11},
       {input: '12th', result: 12},
       {input: '13th', result: 13},
       {input: '14th', result: 14},
       {input: '123rd', result: 123},
-      {input: '123f', length: 0}
+      {input: '123f', length: 0},
+      {input: 'threeve', length: 0}
     ]
 
     _.forEach(testCases, test)
@@ -72,8 +74,10 @@ describe('Ordinal', () => {
       {input: '1', placeholder: true},
       {input: '1s', length: 0},
       {input: '1st', length: 0},
+      {input: 'first', length: 0},
       {input: '4th', length: 0},
       {input: '5th', result: 5},
+      {input: 'fifth', result: 5},
       {input: '6th', result: 6},
       {input: '36th', result: 36}
     ]
@@ -90,9 +94,11 @@ describe('Ordinal', () => {
       {input: '1st', result: 1},
       {input: '4th', result: 4},
       {input: '5th', result: 5},
+      {input: 'fifth', result: 5},
       {input: '6', length: 0},
       {input: '6t', length: 0},
       {input: '6th', length: 0},
+      {input: 'sixth', length: 0},
       {input: '15', length: 0},
       {input: '15t', length: 0},
       {input: '15th', length: 0}
@@ -109,11 +115,14 @@ describe('Ordinal', () => {
     const testCases = [
       {input: '1', placeholder: true}, // TODO
       {input: '1s', length: 0},
+      {input: 'first', length: 0},
       {input: '2nd', length: 0},
       {input: '3rd', result: 3},
       {input: '6th', result: 6},
+      {input: 'sixth', result: 6},
       {input: '7th', result: 7},
       {input: '8th', length: 0},
+      {input: 'eigth', length: 0},
       {input: '89', length: 0}
     ]
 

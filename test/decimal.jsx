@@ -11,7 +11,7 @@ describe('Decimal', () => {
 
   function test({input, text, placeholder, result, length = 1}) {
     if (text == null)  {
-      text = placeholder ? 'decimal' : input
+      text = placeholder ? undefined : input
     }
     
     it(input, () => {

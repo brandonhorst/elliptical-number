@@ -15,7 +15,7 @@ describe('DigitString', () => {
 
   function test({input, text, placeholder, result, length = 1}) {
     if (text == null)  {
-      text = placeholder ? 'digit string' : input
+      text = placeholder ? undefined : input
     }
     if (result == null) {
       result = placeholder ? undefined : text

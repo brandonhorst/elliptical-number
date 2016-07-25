@@ -52,13 +52,48 @@ function describe ({props}) {
       arguments={props.phraseArguments || (props.phraseArguments ? [props.phraseArgument] : [props.label])}
       suppressWhen={(input) => suppressWhen(input, props)}
       suppressEmpty>
-      <map outbound={getValue} skipIncomplete>
-        <freetext
-          filter={completeOrdinal}
-          limit={props.limit}
-          splitOn={/[^0-9stndhr]/}
-          score={1} />
-      </map>
+      <choice>
+        <map outbound={getValue} skipIncomplete>
+          <freetext
+            filter={completeOrdinal}
+            limit={props.limit}
+            splitOn={/[^0-9stndhr]/}
+            score={1} />
+        </map>
+        <list items={[
+          {text: 'first', value: 1},
+          {text: 'second', value: 2},
+          {text: 'third', value: 3},
+          {text: 'fourth', value: 4},
+          {text: 'fifth', value: 5},
+          {text: 'sixth', value: 6},
+          {text: 'seventh', value: 7},
+          {text: 'eighth', value: 8},
+          {text: 'ninth', value: 9},
+          {text: 'tenth', value: 10},
+          {text: 'eleventh', value: 11},
+          {text: 'twelvth', value: 12},
+          {text: 'thirteenth', value: 13},
+          {text: 'fourteenth', value: 14},
+          {text: 'fifteenth', value: 15},
+          {text: 'sixteenth', value: 16},
+          {text: 'seventeenth', value: 17},
+          {text: 'eighteenth', value: 18},
+          {text: 'ninteenth', value: 19},
+          {text: 'twentieth', value: 20},
+          {text: 'twenty-first', value: 21},
+          {text: 'twenty-second', value: 22},
+          {text: 'twenty-third', value: 23},
+          {text: 'twenty-fourth', value: 24},
+          {text: 'twenty-fifth', value: 25},
+          {text: 'twenty-sixth', value: 26},
+          {text: 'twenty-seventh', value: 27},
+          {text: 'twenty-eighth', value: 28},
+          {text: 'twenty-ninth', value: 29},
+          {text: 'thirtieth', value: 30},
+          {text: 'thirty-first', value: 31}
+        ]} />
+      </choice>
     </placeholder>
   )
 }

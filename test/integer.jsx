@@ -44,12 +44,13 @@ describe('Integer', () => {
 
   describe('default', () => {
     before(() => {
-      parse = compile(<Integer allowWordForm />)
+      parse = compile(<Integer allowWordForm allowIndefiniteArticles />)
     })
 
     const testCases = [
       {input: '1', result: 1},
       {input: 'twenty-two', result: 22},
+      {input: 'an', result: 1},
       {input: '-1', result: -1},
       {input: '123', result: 123},
       {input: '-123', result: -123},

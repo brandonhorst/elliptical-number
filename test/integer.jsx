@@ -44,22 +44,25 @@ describe('Integer', () => {
 
   describe('default', () => {
     before(() => {
-      parse = compile(<Integer />)
+      parse = compile(<Integer allowWordForm />)
     })
 
     const testCases = [
       {input: '1', result: 1},
+      {input: 'twenty-two', result: 22},
       {input: '-1', result: -1},
       {input: '123', result: 123},
       {input: '-123', result: -123},
       {input: '+123', result: 123},
       {input: '0', result: 0},
+      {input: 'zero', result: 0},
       {input: '-0', result: 0},
       {input: 'f3', length: 0},
       {input: '-f3', length: 0},
       {input: '3f', length: 0},
       {input: '-3f', length: 0},
       {input: '3+', length: 0},
+      {input: 'threeve', length: 0},
       {input: '3-', length: 0},
       {input: '3+3', length: 0}
     ]

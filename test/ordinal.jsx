@@ -30,7 +30,7 @@ describe('Ordinal', () => {
 
   describe('default', () => {
     beforeEach(() => {
-      parse = compile(<Ordinal />)
+      parse = compile(<Ordinal allowWordForm />)
     })
 
     const testCases = [
@@ -67,7 +67,7 @@ describe('Ordinal', () => {
 
   describe('min', () => {
     before(() => {
-      parse = compile(<Ordinal min={5} />)
+      parse = compile(<Ordinal allowWordForm min={5} />)
     })
 
     const testCases = [
@@ -87,7 +87,7 @@ describe('Ordinal', () => {
 
   describe('max', () => {
     before(() => {
-      parse = compile(<Ordinal max={5} />)
+      parse = compile(<Ordinal allowWordForm max={5} />)
     })
 
     const testCases = [
@@ -109,7 +109,7 @@ describe('Ordinal', () => {
 
   describe('min/max', () => {
     before(() => {
-      parse = compile(<Ordinal min={3} max={7} />)
+      parse = compile(<Ordinal allowWordForm min={3} max={7} />)
     })
 
     const testCases = [

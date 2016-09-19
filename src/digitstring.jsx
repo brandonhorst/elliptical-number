@@ -58,4 +58,4 @@ function describe ({props}) {
   )
 }
 
-export default {defaultProps, filterResult, describe}
+export default {defaultProps, filterResult, describe, id: 'elliptical-number:DigitString'}

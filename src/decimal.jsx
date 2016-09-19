@@ -74,4 +74,4 @@ function describe ({props}) {
   )
 }
 
-export default {defaultProps, describe, filterResult}
+export default {defaultProps, describe, filterResult, id: 'elliptical-number:Decimal'}
